@@ -52,7 +52,8 @@ function Header({ user }) {
               <Sparkles className="h-5 w-5 text-cyan-400 animate-pulse" />
             </div>
           </div>
-          <div className="">
+          {/* Logo Text - hidden on mobile */}
+          <div className="hidden md:block">
             <h1 className="text-xl font-black tracking-tighter text-slate-900 flex items-center">
               RESUME<span className="text-blue-600 ml-1">PILOT</span>
               <span className="ml-1 flex h-2 w-2 rounded-full bg-cyan-500 animate-bounce"></span>
