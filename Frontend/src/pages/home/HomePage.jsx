@@ -21,10 +21,7 @@ function HomePage() {
   const dispatch = useDispatch();
 
   const handleGithubClick = () => {
-    window.open(
-      "https://github.com/sahidrajaansari/Ai-Resume-Builder",
-      "_blank"
-    );
+    window.open("https://github.com/RohanMakvana24/Resume-Pilot", "_blank");
   };
 
   useEffect(() => {

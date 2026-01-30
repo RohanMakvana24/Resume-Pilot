@@ -144,7 +144,7 @@ export function EditResume() {
             <div
               className={`${activeTab === "preview" ? "hidden lg:block" : ""}`}
             >
-              <div className="bg-white rounded-xl shadow-sm border p-0 overflow-hidden">
+              <div className="bg-white rounded-xl shadow-sm border p-0 overflow-hidden mb-[100px]">
                 <div className="p-6 border-b">
                   <h2 className="text-lg font-semibold text-gray-900">
                     Resume Details
