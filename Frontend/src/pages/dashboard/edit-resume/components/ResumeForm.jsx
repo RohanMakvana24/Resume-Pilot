@@ -19,12 +19,13 @@ import {
   CheckCircle2,
   Save,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function ResumeForm() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const resumeInfo = useSelector((state) => state.editResume.resumeData);
-
+  const navigate = useNavigate();
   const sections = [
     {
       id: 0,
@@ -91,17 +92,15 @@ function ResumeForm() {
               <button
                 key={section.id}
                 onClick={() => setCurrentIndex(index)}
-                className={`flex flex-col items-center justify-center h-20 gap-2 p-2 rounded-lg transition-all relative ${
-                  currentIndex === index
-                    ? "bg-blue-50 border border-blue-200"
-                    : "hover:bg-gray-50"
-                }`}
+                className={`flex flex-col items-center justify-center h-20 gap-2 p-2 rounded-lg transition-all relative ${currentIndex === index
+                  ? "bg-blue-50 border border-blue-200"
+                  : "hover:bg-gray-50"
+                  }`}
               >
                 <div className="relative">
                   <Icon
-                    className={`w-5 h-5 ${
-                      currentIndex === index ? "text-blue-600" : "text-gray-400"
-                    }`}
+                    className={`w-5 h-5 ${currentIndex === index ? "text-blue-600" : "text-gray-400"
+                      }`}
                   />
                   {isCompleted && (
                     <CheckCircle2 className="w-4 h-4 text-green-500 absolute -top-1 -right-1" />
@@ -155,11 +154,11 @@ function ResumeForm() {
           <div className="min-h-[300px] sm:min-h-[400px]">
             <CurrentComponent
               resumeInfo={resumeInfo}
-              enanbledNext={() => {}}
-              enanbledPrev={() => {}}
-              setEnabledNext={() => {}}
-              setEnabledPrev={() => {}}
-              enabledPrev={() => {}}
+              enanbledNext={() => { }}
+              enanbledPrev={() => { }}
+              setEnabledNext={() => { }}
+              setEnabledPrev={() => { }}
+              enabledPrev={() => { }}
             />
           </div>
 
@@ -169,11 +168,10 @@ function ResumeForm() {
               <button
                 disabled={currentIndex === 0}
                 onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
-                className={`px-4 py-2 border rounded-lg flex items-center gap-2 text-sm font-medium ${
-                  currentIndex === 0
-                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
-                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                }`}
+                className={`px-4 py-2 border rounded-lg flex items-center gap-2 text-sm font-medium ${currentIndex === 0
+                  ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                  : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                  }`}
               >
                 <ArrowLeft className="w-4 h-4" />
                 Previous
@@ -200,7 +198,10 @@ function ResumeForm() {
                   <ArrowRight className="w-4 h-4" />
                 </button>
               ) : (
-                <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium flex items-center gap-2">
+                <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium flex items-center gap-2" onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/dashboard/view-resume/${resumeInfo._id}`);
+                }}>
                   <CheckCircle2 className="w-4 h-4" />
                   Complete Resume
                 </button>

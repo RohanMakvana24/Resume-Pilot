@@ -89,11 +89,10 @@ export function EditResume() {
               <div className="flex bg-gray-100 rounded-lg p-1">
                 <button
                   onClick={() => setActiveTab("edit")}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    activeTab === "edit"
-                      ? "bg-white shadow-sm"
-                      : "hover:bg-gray-200"
-                  }`}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "edit"
+                    ? "bg-white shadow-sm"
+                    : "hover:bg-gray-200"
+                    }`}
                 >
                   <div className="flex items-center gap-2">
                     <Edit3 className="w-4 h-4" />
@@ -102,11 +101,10 @@ export function EditResume() {
                 </button>
                 <button
                   onClick={() => setActiveTab("preview")}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    activeTab === "preview"
-                      ? "bg-white shadow-sm"
-                      : "hover:bg-gray-200"
-                  }`}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "preview"
+                    ? "bg-white shadow-sm"
+                    : "hover:bg-gray-200"
+                    }`}
                 >
                   <div className="flex items-center gap-2">
                     <Eye className="w-4 h-4" />
