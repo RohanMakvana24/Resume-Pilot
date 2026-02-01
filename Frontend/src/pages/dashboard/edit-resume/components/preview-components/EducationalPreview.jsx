@@ -1,50 +1,27 @@
 import React from "react";
 
 function EducationalPreview({ resumeInfo }) {
-  return (
-    <div className="my-6">
-      {resumeInfo?.education.length > 0 && (
-        <div>
-          <h2
-            className="text-center font-bold text-sm mb-2"
-            style={{
-              color: resumeInfo?.themeColor,
-            }}
-          >
-            Education
-          </h2>
-          <hr
-            style={{
-              borderColor: resumeInfo?.themeColor,
-            }}
-          />
-        </div>
-      )}
+  const themeColor = resumeInfo?.themeColor || "#000000";
 
-      {resumeInfo?.education.map((education, index) => (
-        <div key={index} className="my-5">
-          <h2
-            className="text-sm font-bold"
-            style={{
-              color: resumeInfo?.themeColor,
-            }}
-          >
-            {education.universityName}
-          </h2>
-          <h2 className="text-xs flex justify-between">
-            {education?.degree}
-            {education?.degree && education?.major ? " in " : null}
-            {education?.major}
-            <span>
-              {education?.startDate}{" "}
-              {education?.startDate && education?.endDate ? " - " : null}{" "}
-              {education?.endDate}
-            </span>
-          </h2>
-          <div className="text-xs">
-            {education?.grade ? `${education?.gradeType} - ${education?.grade}` : null}
+  return (
+    <div className="flex flex-col gap-6">
+      {resumeInfo?.education?.map((edu, index) => (
+        <div key={index} className="group">
+          <h4 className="text-sm font-bold text-slate-800 leading-tight">
+            {edu.universityName}
+          </h4>
+          <p className="text-[13px] font-medium mt-1" style={{ color: themeColor }}>
+            {edu.degree} {edu.major ? `in ${edu.major}` : ""}
+          </p>
+          <div className="flex justify-between items-center mt-1 text-[11px] font-semibold text-slate-500 italic">
+            <span>{edu.startDate} — {edu.endDate}</span>
+            {edu.grade && <span className="bg-slate-100 px-2 py-0.5 rounded">{edu.gradeType}: {edu.grade}</span>}
           </div>
-          <p className="text-xs my-2">{education?.description}</p>
+          {edu.description && (
+            <p className="text-[11px] text-slate-600 mt-2 leading-relaxed">
+              {edu.description}
+            </p>
+          )}
         </div>
       ))}
     </div>

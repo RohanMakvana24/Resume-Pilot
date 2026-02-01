@@ -1,54 +1,18 @@
 import React from "react";
 
-function PersonalDeatailPreview({ resumeInfo }) {
+function PersonalDetailPreview({ resumeInfo }) {
   return (
-    <div>
-      <h2
-        className="font-bold text-xl text-center"
-        style={{
-          color: resumeInfo?.themeColor,
-        }}
-      >
-        {resumeInfo?.firstName} {resumeInfo?.lastName}
-      </h2>
-      <h2 className="text-center text-sm font-medium">
-        {resumeInfo?.jobTitle}
-      </h2>
-      <h2
-        className="text-center font-normal text-xs"
-        style={{
-          color: resumeInfo?.themeColor,
-        }}
-      >
-        {resumeInfo?.address}
-      </h2>
-
-      <div className="flex justify-between">
-        <h2
-          className="font-normal text-xs"
-          style={{
-            color: resumeInfo?.themeColor,
-          }}
-        >
-          {resumeInfo?.phone}
-        </h2>
-        <h2
-          className="font-normal text-xs"
-          style={{
-            color: resumeInfo?.themeColor,
-          }}
-        >
-          {resumeInfo?.email}
-        </h2>
+    <div className="w-full">
+      <h1 className="text-4xl font-extrabold uppercase tracking-tighter">
+        {resumeInfo?.firstName} <span style={{ color: resumeInfo?.themeColor || '#3b82f6' }}>{resumeInfo?.lastName}</span>
+      </h1>
+      <p className="text-xl font-light opacity-90 mt-1">{resumeInfo?.jobTitle}</p>
+      <div className="flex flex-wrap gap-4 mt-4 text-xs font-medium opacity-80">
+        <span>{resumeInfo?.email}</span>
+        <span>{resumeInfo?.phone}</span>
+        <span>{resumeInfo?.address}</span>
       </div>
-      <hr
-        className="border-[1.5px] my-2"
-        style={{
-          borderColor: resumeInfo?.themeColor,
-        }}
-      />
     </div>
   );
 }
-
-export default PersonalDeatailPreview;
+export default PersonalDetailPreview;

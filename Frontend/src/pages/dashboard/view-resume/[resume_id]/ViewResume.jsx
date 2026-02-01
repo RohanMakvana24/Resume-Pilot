@@ -6,12 +6,12 @@ import { useDispatch } from "react-redux";
 import { addResumeData } from "@/features/resume/resumeFeatures";
 import { RWebShare } from "react-web-share";
 import { toast } from "sonner";
-import PreviewPage from "../../edit-resume/components/PreviewPage";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import PreviewPage from "../../edit-resume/components/PreviewPage";
 
 function ViewResume() {
-  const [resumeInfo, setResumeInfo] = React.useState({});
+  const [resumeInfo, setResumeInfo] = useState({});
   const [isDownloading, setIsDownloading] = useState(false);
   const { resume_id } = useParams();
   const dispatch = useDispatch();
@@ -27,168 +27,52 @@ function ViewResume() {
     dispatch(addResumeData(response.data));
   };
 
-  const handleStandardDownload = () => {
-    window.print();
-  };
-
-  const handleFullSizePDFDownload = async () => {
+  const handleDownload = async () => {
     setIsDownloading(true);
+    const element = resumeRef.current;
+
     try {
-      const element = resumeRef.current;
-      if (!element) return;
-
-      // Hide the progress bar and footer elements
-      const elementsToHide = element.querySelectorAll(".no-print");
-      elementsToHide.forEach((el) => (el.style.display = "none"));
-
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 2, // High resolution
         useCORS: true,
-        logging: false,
         backgroundColor: "#ffffff",
       });
 
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 0;
+      const widthRatio = pageWidth / canvas.width;
+      const finalWidth = canvas.width * widthRatio;
+      const finalHeight = canvas.height * widthRatio;
 
-      pdf.addImage(
-        imgData,
-        "PNG",
-        imgX,
-        imgY,
-        imgWidth * ratio,
-        imgHeight * ratio
-      );
-      pdf.save(`${resumeInfo.name || "resume"}-full.pdf`);
-
-      // Show hidden elements again
-      elementsToHide.forEach((el) => (el.style.display = ""));
-
-      toast.success("Full-size PDF downloaded successfully!");
+      pdf.addImage(imgData, "JPEG", 0, 0, finalWidth, finalHeight);
+      pdf.save(`${resumeInfo?.firstName || "Resume"}_CV.pdf`);
+      toast.success("Resume downloaded!");
     } catch (error) {
-      console.error("Error generating PDF:", error);
-      toast.error("Failed to download PDF");
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
-  const handleHighQualityPDFDownload = async () => {
-    setIsDownloading(true);
-    try {
-      const element = resumeRef.current;
-      if (!element) return;
-
-      // Hide the progress bar and footer elements
-      const elementsToHide = element.querySelectorAll(".no-print");
-      elementsToHide.forEach((el) => (el.style.display = "none"));
-
-      const canvas = await html2canvas(element, {
-        scale: 3, // Higher scale for better quality
-        useCORS: true,
-        logging: false,
-        backgroundColor: "#ffffff",
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-
-      // Calculate dimensions for A4
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-
-      // Add image to PDF
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${resumeInfo.name || "resume"}-high-quality.pdf`);
-
-      // Show hidden elements again
-      elementsToHide.forEach((el) => (el.style.display = ""));
-
-      toast.success("High-quality PDF downloaded successfully!");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      toast.error("Failed to download PDF");
+      toast.error("Download failed");
     } finally {
       setIsDownloading(false);
     }
   };
 
   return (
-    <>
-      <div className="flex flex-col justify-center items-center mt-[100px]">
-        <div id="noPrint">
-          <div className="my-10 mx-10 md:mx-20 lg:mx-36">
-            <h2 className="text-center text-2xl font-medium">
-              Congrats! Your Ultimate AI generated Resume is ready!
-            </h2>
-            <p className="text-center text-gray-400">
-              Now you are ready to download your resume and you can share unique
-              resume url with your friends and family
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 my-10 px-4">
-              <Button onClick={handleStandardDownload} variant="outline">
-                Standard Print
-              </Button>
-              <Button
-                onClick={handleFullSizePDFDownload}
-                disabled={isDownloading}
-              >
-                {isDownloading ? "Generating PDF..." : "Download Full PDF"}
-              </Button>
-              <Button
-                onClick={handleHighQualityPDFDownload}
-                disabled={isDownloading}
-                variant="secondary"
-              >
-                {isDownloading ? "Generating..." : "High Quality PDF"}
-              </Button>
-              <RWebShare
-                data={{
-                  text: "Check out my resume!",
-                  url: `${
-                    import.meta.env.VITE_BASE_URL
-                  }/dashboard/view-resume/${resume_id}`,
-                  title: "My Resume",
-                }}
-                onClick={() => toast.success("Resume Shared Successfully")}
-              >
-                <Button variant="outline">Share URL</Button>
-              </RWebShare>
-            </div>
-          </div>
-        </div>
-        <div ref={resumeRef} id="pdf-content">
-          <div
-            className="bg-white rounded-lg p-8 print-area mx-auto"
-            style={{
-              width: "210mm",
-              minHeight: "297mm",
-              margin: "0 auto",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <PreviewPage />
-          </div>
+    <div className="min-h-screen bg-gray-50 pb-20 mt-[100px]">
+      <div id="no-print" className="py-10 text-center">
+        <h2 className="text-3xl font-bold text-gray-800">Your Resume is Ready</h2>
+        <p className="text-gray-500 mb-6">Download your professional CV below</p>
+        <div className="flex justify-center gap-4">
+          <Button onClick={handleDownload} disabled={isDownloading}>
+            {isDownloading ? "Generating..." : "Download Professional PDF"}
+          </Button>
         </div>
       </div>
-    </>
+
+      <div ref={resumeRef} className="w-[210mm] min-h-[297mm] mx-auto bg-white shadow-2xl overflow-hidden">
+        <PreviewPage />
+      </div>
+    </div>
   );
 }
 

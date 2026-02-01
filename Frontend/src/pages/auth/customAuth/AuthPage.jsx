@@ -154,14 +154,7 @@ function AuthPage() {
                 <label className="text-sm font-bold text-slate-700">
                   Password
                 </label>
-                {!isSignUp && (
-                  <a
-                    href="#"
-                    className="text-xs text-blue-600 font-bold hover:underline"
-                  >
-                    Forgot?
-                  </a>
-                )}
+
               </div>
               <div className="relative flex items-center group">
                 <FaLock className="absolute left-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
