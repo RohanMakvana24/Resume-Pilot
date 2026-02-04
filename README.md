@@ -59,13 +59,6 @@ OPENAI_API_KEY={Your OpenAI API Key}
 VITE_APP_URL=http://localhost:5001/
 ```
 
-### 3️⃣ Choose a Setup Method  
-
-Now, you can **choose** to set up the project **with or without Docker**.
-
----
-
-
 ### 🔧 Setup
 
 #### **Frontend Setup**
